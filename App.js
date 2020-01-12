@@ -96,7 +96,7 @@ async function sendToGoogle(url) {
     console.log('sending phtoo to googe');
     let response = await fetch(
       'https://vision.googleapis.com/v1/images:annotate?key=' +
-        Environment['GOOGLE_CLOUD_VISION_API_KEY'],
+        Environment['GOOGLE_CLOUD_VISION_API_KEY'] + '&fields=responses.fullTextAnnotation.text',
       {
         headers: {
           Accept: 'application/json',
@@ -108,6 +108,7 @@ async function sendToGoogle(url) {
     );
     let responseJson = await response.json();
     console.log(responseJson);
+    console.log(responseJson.responses[0].fullTextAnnotation.text.split('\n'));
   } catch (error) {
     console.log(error);
   }
