@@ -1,6 +1,7 @@
 import { AppLoading } from 'expo';
 import { Asset } from 'expo-asset';
 import * as Font from 'expo-font';
+import * as Permissions from 'expo-permissions'
 import React, { useState } from 'react';
 import { Platform, StatusBar, StyleSheet, View } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
@@ -41,6 +42,8 @@ async function loadResourcesAsync() {
       // remove this if you are not using it in your app
       'space-mono': require('./assets/fonts/SpaceMono-Regular.ttf'),
     }),
+    Permissions.askAsync(Permissions.CAMERA_ROLL), //unsure if this will be fine for ios
+    Permissions.askAsync(Permissions.CAMERA),
   ]);
 }
 

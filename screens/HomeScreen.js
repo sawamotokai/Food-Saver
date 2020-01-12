@@ -2,6 +2,7 @@ import * as WebBrowser from 'expo-web-browser';
 import React from 'react';
 import {
   Image,
+  Button,
   Platform,
   ScrollView,
   StyleSheet,
@@ -10,6 +11,8 @@ import {
   View,
 } from 'react-native';
 
+import * as imagePicker from 'expo-image-picker';
+import uuid from 'uuid';
 import { MonoText } from '../components/StyledText';
 
 export default function HomeScreen() {
@@ -45,6 +48,11 @@ export default function HomeScreen() {
         </View>
 
         <View style={styles.helpContainer}>
+          <Button
+            title="Take a photo"
+            onPress={() => takePhoto()}>
+          </Button>
+
           <TouchableOpacity onPress={handleHelpPress} style={styles.helpLink}>
             <Text style={styles.helpLinkText}>
               Help, it didn’t automatically reload!
@@ -72,6 +80,48 @@ export default function HomeScreen() {
 HomeScreen.navigationOptions = {
   header: null,
 };
+
+takePhoto = async () => {
+  let photo = await imagePicker.launchCameraAsync({
+    allowEditing: true,
+    aspect: [4,3]
+  });
+
+  sendPhoto(photo);
+};
+
+sendPhoto = async (res) => {
+  if (!res.cancelled) {
+    uploadUrl 
+  }
+
+}
+
+async function uploadImageAsync(uri) {
+  const blob = await new Promise((resolve, reject) => {
+    const xhr = new XMLHttpRequest();
+    xhr.onload = function() {
+      resolve(xhr.response);
+    };
+    xhr.onerror = function(e) {
+      console.log(e);
+      reject(new TypeError('Network request failed'));
+    };
+    xhr.responseType = 'blob';
+    xhr.open('GET', uri, true);
+    xhr.send(null);
+  });
+
+  const ref = firebase
+    .storage()
+    .ref()
+    .child(uuid.v4());
+  const snapshot = await ref.put(blob);
+
+  blob.close();
+
+  return await snapshot.ref.getDownloadURL();
+}
 
 function DevelopmentModeNotice() {
   if (__DEV__) {
