@@ -56,12 +56,6 @@ export default class NewItem extends React.Component {
 	}
 
 	render() {
-		return (
-			<View style = {item}>
-                <Text>{this.state.name}</Text>
-            </View>
-		);
-        //item style will be dependent on how close expiry date is to current date. 
         const styles = StyleSheet.create({
             item: {
                 display: inline
@@ -79,6 +73,12 @@ export default class NewItem extends React.Component {
                 backgroundColor: "green"
             }
         })
+		return (
+			<View style = {styles.item}>
+                <Text>{this.state.name}</Text>
+            </View>
+		);
+        //item style will be dependent on how close expiry date is to current date. 
     }
 }
 
