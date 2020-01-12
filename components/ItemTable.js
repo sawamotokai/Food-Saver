@@ -28,12 +28,43 @@ export default class ItemTable extends React.Component {
 	loadData = async () => {
 		try {
 			let user = await AsyncStorage.getItem('user');
+
 			this.setState({ items: [ ...JSON.parse(user) ] });
 			alert(JSON.parse(user)[0].name);
 		} catch (error) {
 			throw error;
 		}
 	};
+
+	createItem(item) {
+		//     if (item not on DB)
+		//         user enter manually
+		//     else
+		// poll from db
+		const axios = require('axios');
+		axios
+			.get(`/api/get/${item.name}`)
+			.then((res) => {
+				if (!res.data) {
+					axios
+						.post('/api/post', {
+							item: item.name,
+							expiryDate: item.date
+						})
+						.then(function(response) {
+							console.log(response);
+						})
+						.catch(function(error) {
+							console.log(error);
+						});
+				}
+				this.setState({ items: [ ...items, item ] });
+			})
+			.catch((err) => {
+				throw err;
+			});
+		saveData();
+	}
 
 	handleEdit() {}
 
