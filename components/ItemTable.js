@@ -20,10 +20,6 @@ export default class ItemTable extends React.Component{
         this.handleEdit = this.handleEdit.bind(this)
     }
 
-    handleEdit(){
-        
-    } 
-
     render(){
         const Items = this.state.Items.map(item => 
             <Item 
@@ -33,7 +29,7 @@ export default class ItemTable extends React.Component{
             />)
         return(
             <View className = {this.state.edit ? "TableEdit" : "NoTableEdit"}>
-                <Text>Name          Expiry Date </Text>
+                <Text>Name     |     Expiry Date </Text>
                 {Items}
             </View>
         )
