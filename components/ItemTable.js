@@ -45,6 +45,25 @@ export default class ItemTable extends React.Component {
 		const ITEMS = this.state.items.map((item) => <Item key={item.id} edit={this.state.edit} item={item} />);
 		const NEWITEMS = this.state.newItems.map((item) => <NewItem name = {item}/>)
 		return (
+			<View>
+				<Text>Pre-existing</Text>
+			<SwipeListView
+				data={ITEMS}
+				renderItem={(data, rowMap) => (
+					<View style={styles.rowFront}>
+                    	<Item key={item.id} edit={this.state.edit} item={item} />
+                	</View>
+				)}
+				renderHiddenItem={ (data, rowMap) => (
+					<View style={styles.rowBack}>
+						<Text>edit</Text>
+						<Text>delete</Text>
+					</View>
+				)}
+				leftOpenValue={75}
+				rightOpenValue={-75}
+			/>
+				<Text>New</Text>
 			<SwipeListView
 				data={NEWITEMS}
 				renderItem={(data, rowMap) => (
@@ -62,6 +81,7 @@ export default class ItemTable extends React.Component {
 				leftOpenValue={75}
 				rightOpenValue={-75}
 			/>
+			</View>
 		)
 	}
 	// return (

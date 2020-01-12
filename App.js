@@ -9,7 +9,6 @@ import ItemTable from './components/ItemTable';
 
 let global = []
 
-//might have to add state
 export default class App extends React.Component{
   constructor(){
     super();
