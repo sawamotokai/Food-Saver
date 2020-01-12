@@ -2,7 +2,7 @@ import React from 'react'
 import {
     Image,
     Platform,
-ScrollView,
+    ScrollView,
     StyleSheet,
     Text,
     TouchableOpacity,
@@ -16,30 +16,23 @@ export default class CustomHeader extends React.Component{
     constructor(){
         super()
         this.state = {
-            search: ''
         }
     }
 
-    updateSearch(event){
-            
+    onClick(){
+        this.props.onEditClick();
     }
 
     render(){
         return(
             <Header>
-                <button>
-
-                </button>
-                <SearchBar
-                    ref="searchBar"
-                    placeholder="Search"
-                    onChangeText={this.updateSearch}
-                    onSearchButtonPress={...}
-                    onCancelButtonPress={...}
+                <Button
+                title = "Camera"
+                />   
+                <Button
+                onPress = {this.onClick()}
+                title = "Edit"
                 />
-                <button>
-
-                </button>
             </Header>
         )
     }
