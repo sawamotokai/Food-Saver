@@ -13,6 +13,9 @@ import {
 
 import * as imagePicker from 'expo-image-picker';
 import uuid from 'uuid';
+// import Environment from '../config/environment';
+// import firebase from '../config/firebase';
+
 import { MonoText } from '../components/StyledText';
 
 export default function HomeScreen() {
@@ -92,7 +95,8 @@ takePhoto = async () => {
 
 sendPhoto = async (res) => {
   if (!res.cancelled) {
-    uploadUrl 
+    uploadUrl = await uploadImageAsync(res.uri);
+    console.log(uploadUrl);
   }
 
 }

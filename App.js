@@ -5,8 +5,32 @@ import * as Permissions from 'expo-permissions'
 import React, { useState } from 'react';
 import { Platform, StatusBar, StyleSheet, View } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
-
 import AppNavigator from './navigation/AppNavigator';
+
+import firebase from 'firebase';
+
+var firebaseConfig = {
+  apiKey: "AIzaSyAnyrQI1VlCRAUWF8Jy3MT8JdFEZGJF95M",
+  authDomain: "nwhacks-e8841.firebaseapp.com",
+  databaseURL: "https://nwhacks-e8841.firebaseio.com",
+  projectId: "nwhacks-e8841",
+  storageBucket: "nwhacks-e8841.appspot.com",
+  messagingSenderId: "130353463524",
+  appId: "1:130353463524:web:86db7a2c91d49851cc2cf1",
+  measurementId: "G-HFSCYR506G"
+};
+// Initialize Firebase
+firebase.initializeApp(firebaseConfig);
+
+/*
+let serviceAccount = require('./config/nwhacks-e8841-firebase-adminsdk-4a6ho-f9ddac3d91.json');
+let admin = require('firebase-admin');
+
+admin.initializeApp({
+  credential: admin.credential.cert(serviceAccount),
+  databaseURL: "https://nwhacks-e8841.firebaseio.com"
+});
+*/
 
 export default function App(props) {
   const [isLoadingComplete, setLoadingComplete] = useState(false);
