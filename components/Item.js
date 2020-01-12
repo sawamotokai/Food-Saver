@@ -66,15 +66,6 @@ export default class Item extends React.Component {
 			</View>
 		);
 
-
-    pressButton(){
-        <View>
-            <Button
-                 title = "Edit"
-                 onPress = {() => render}/>
-        </View>
-    }
-
     render(){
         return(
             <View style = {this.CalcStyle}>

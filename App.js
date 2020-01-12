@@ -20,8 +20,7 @@ export default class App extends React.Component{
   render(){
     return (
       <View style={styles.container}>
-        <Text>Open up App.js to start working on your app!</Text>
-        <Text>start michael!</Text>
+        <Text>Take a photo of your grocery receipt to remind you when it goes bad!</Text>
         <Button
           title="Take photo"
           onPress={() => takePhoto()}>
