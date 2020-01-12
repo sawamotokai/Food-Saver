@@ -7,6 +7,7 @@ import { Platform, StatusBar, StyleSheet, View } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import AppNavigator from './navigation/AppNavigator';
 
+/*
 import firebase from 'firebase';
 
 var firebaseConfig = {
@@ -21,6 +22,7 @@ var firebaseConfig = {
 };
 // Initialize Firebase
 firebase.initializeApp(firebaseConfig);
+*/
 
 /*
 let serviceAccount = require('./config/nwhacks-e8841-firebase-adminsdk-4a6ho-f9ddac3d91.json');

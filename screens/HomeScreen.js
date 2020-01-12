@@ -13,10 +13,11 @@ import {
 
 import * as imagePicker from 'expo-image-picker';
 import uuid from 'uuid';
-// import Environment from '../config/environment';
-// import firebase from '../config/firebase';
+import Environment from '../config/environment';
 
 import { MonoText } from '../components/StyledText';
+
+import firebase from '../config/firebase';
 
 export default function HomeScreen() {
   return (
@@ -95,8 +96,13 @@ takePhoto = async () => {
 
 sendPhoto = async (res) => {
   if (!res.cancelled) {
-    uploadUrl = await uploadImageAsync(res.uri);
-    console.log(uploadUrl);
+    try {
+      uploadUrl = await uploadImageAsync(res.uri);
+      console.log(uploadUrl);
+      sendToGoogle(uploadUrl);
+    } catch(err) {
+      console.log(err);
+    }
   }
 
 }
@@ -116,6 +122,9 @@ async function uploadImageAsync(uri) {
     xhr.send(null);
   });
 
+  if (!firebase.apps.length) {
+    firebase.initializeApp(firebaseConfig);
+  }
   const ref = firebase
     .storage()
     .ref()
@@ -124,8 +133,56 @@ async function uploadImageAsync(uri) {
 
   blob.close();
 
-  return await snapshot.ref.getDownloadURL();
+  const url = await snapshot.ref.getDownloadURL();
+  console.log(url);
+
+  return url;
 }
+
+async function sendToGoogle(url) {
+  try {
+    let body = JSON.stringify({
+      requests: [
+        {
+          features: [
+            { type: 'LABEL_DETECTION', maxResults: 10 },
+            { type: 'LANDMARK_DETECTION', maxResults: 5 },
+            { type: 'FACE_DETECTION', maxResults: 5 },
+            { type: 'LOGO_DETECTION', maxResults: 5 },
+            { type: 'TEXT_DETECTION', maxResults: 5 },
+            { type: 'DOCUMENT_TEXT_DETECTION', maxResults: 5 },
+            { type: 'SAFE_SEARCH_DETECTION', maxResults: 5 },
+            { type: 'IMAGE_PROPERTIES', maxResults: 5 },
+            { type: 'CROP_HINTS', maxResults: 5 },
+            { type: 'WEB_DETECTION', maxResults: 5 }
+          ],
+          image: {
+            source: {
+              imageUri: url
+            }
+          }
+        }
+      ]
+    });
+    console.log('sending phtoo to googe');
+    let response = await fetch(
+      'https://vision.googleapis.com/v1/images:annotate?key=' +
+        Environment['GOOGLE_CLOUD_VISION_API_KEY'],
+      {
+        headers: {
+          Accept: 'application/json',
+          'Content-Type': 'application/json'
+        },
+        method: 'POST',
+        body: body
+      }
+    );
+    let responseJson = await response.json();
+    console.log(responseJson);
+  } catch (error) {
+    console.log(error);
+  }
+};
 
 function DevelopmentModeNotice() {
   if (__DEV__) {
