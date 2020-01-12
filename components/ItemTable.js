@@ -50,12 +50,12 @@ export default class ItemTable extends React.Component {
 			<SwipeListView
 				data={ITEMS}
 				renderItem={(data, rowMap) => (
-					<View style={styles.rowFront}>
+					<View>
                     	<Item key={item.id} edit={this.state.edit} item={item} />
                 	</View>
 				)}
 				renderHiddenItem={ (data, rowMap) => (
-					<View style={styles.rowBack}>
+					<View >
 						<Text>edit</Text>
 						<Text>delete</Text>
 					</View>
@@ -67,13 +67,13 @@ export default class ItemTable extends React.Component {
 			<SwipeListView
 				data={NEWITEMS}
 				renderItem={(data, rowMap) => (
-					<View style={styles.rowFront}>
+					<View >
                     	<Text>{data.item}</Text>
                 	</View>
 					// <Item key={item.id} edit={this.state.edit} name={item} />
 				)}
 				renderHiddenItem={ (data, rowMap) => (
-					<View style={styles.rowBack}>
+					<View >
 						<Text>edit</Text>
 						<Text>delete</Text>
 					</View>
