@@ -1,5 +1,17 @@
 import React from 'react';
-import { Image, Platform, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+
+import {
+    Image,
+    Platform,
+    ScrollView,
+    StyleSheet,
+    Text,
+    TouchableOpacity,
+    View,
+    Button,
+    Alert,
+  } from 'react-native';
+
 
 export default class Item extends React.Component {
 	constructor(props) {
@@ -54,24 +66,80 @@ export default class Item extends React.Component {
 			</View>
 		);
 
-		//item style will be dependent on how close expiry date is to current date.
 
-		const styles = StyleSheet.create({
-			item: {
-				display: inline
-			},
-			item_red: {
-				display: inline,
-				backgroundColor: 'red'
-			},
-			item_yellow: {
-				display: inline,
-				backgroundColor: 'yellow'
-			},
-			item_green: {
-				display: inline,
-				backgroundColor: 'green'
-			}
-		});
-	}
+    pressButton(){
+        <View>
+            <Button
+                 title = "Edit"
+                 onPress = {() => render}/>
+        </View>
+    }
+
+    render(){
+        return(
+            <View style = {this.CalcStyle}>
+                <Text>{this.state.name}</Text>
+                <Text>{this.state.expiryDate.toLocaleString()}</Text>
+                <Button>{this.state.edit = false}</Button>
+            </View>
+        )
+
+        //item style will be dependent on how close expiry date is to current date. 
+
+        const styles = StyleSheet.create({
+            item: {
+                display: inline
+            },
+            item_red: {
+                display: inline,
+                backgroundColor: "red"
+            },
+            item_yellow:{
+                display: inline,
+                backgroundColor: "yellow"
+            },
+            item_green:{
+                display: inline,
+                backgroundColor: "green"
+            }
+        })
+    }
+
+    edit() {
+        return (
+          <View style={{marginTop: 22}}>
+            <Modal
+              animationType="slide"
+              transparent={false}
+              visible={this.state.modalVisible}
+              onRequestClose={() => {
+                Alert.alert('MODAL CLOSED');
+              }}>
+              <View style={{marginTop: 22}}>
+                <View>
+                  <Text>Hello World!</Text>
+    
+                  <TouchableHighlight
+                    onPress={() => {
+                      this.setModalVisible(!this.state.modalVisible);
+                    }}>
+                    <Text>Hide Modal</Text>
+                  </TouchableHighlight>
+                </View>
+              </View>
+            </Modal>
+    
+            <TouchableHighlight
+              onPress={() => {
+                this.setModalVisible(true);
+              }}>
+              <Text>Show Modal</Text>
+            </TouchableHighlight>
+          </View>
+        );
+      }
+    }
+
+    
 }
+
