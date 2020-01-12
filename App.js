@@ -1,6 +1,4 @@
 import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
-import DummyWrapper from './components/DummyWrapper';
 import { Button, StyleSheet, Text, View } from 'react-native';
 import * as imagePicker from 'expo-image-picker';
 
@@ -12,9 +10,6 @@ import firebase from './config/firebase';
 export default function App() {
   return (
     <View style={styles.container}>
-
-      <DummyWrapper>
-      </DummyWrapper>
       <Text>Open up App.js to start working on your app!</Text>
       <Text>start michael!</Text>
       <Button
