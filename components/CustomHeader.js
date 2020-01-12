@@ -2,7 +2,7 @@ import React from 'react'
 import {
     Image,
     Platform,
-    ScrollView,
+ScrollView,
     StyleSheet,
     Text,
     TouchableOpacity,
@@ -21,7 +21,7 @@ export default class CustomHeader extends React.Component{
     }
 
     updateSearch(event){
-        
+            
     }
 
     render(){
