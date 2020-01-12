@@ -6,12 +6,12 @@ import uuid from 'uuid';
 import Environment from './config/environment'
 import firebase from './config/firebase';
 
+console.disableYellowBox = true;
 
 export default function App() {
   return (
     <View style={styles.container}>
-      <Text>Open up App.js to start working on your app!</Text>
-      <Text>start michael!</Text>
+      <Text>Take a photo of your grocery receipt to keep track of when your food goes bad!</Text>
       <Button
         title="Take photo"
         onPress={() => takePhoto()}>
