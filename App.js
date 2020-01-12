@@ -1,62 +1,124 @@
-import { AppLoading } from 'expo';
-import { Asset } from 'expo-asset';
-import * as Font from 'expo-font';
-import React, { useState } from 'react';
-import { Platform, StatusBar, StyleSheet, View } from 'react-native';
-import { Ionicons } from '@expo/vector-icons';
+import React from 'react';
+import { Button, StyleSheet, Text, View } from 'react-native';
+import * as imagePicker from 'expo-image-picker';
 
-import AppNavigator from './navigation/AppNavigator';
+import uuid from 'uuid';
+import Environment from './config/environment'
+import firebase from './config/firebase';
 
-export default function App(props) {
-  const [isLoadingComplete, setLoadingComplete] = useState(false);
 
-  if (!isLoadingComplete && !props.skipLoadingScreen) {
-    return (
-      <AppLoading
-        startAsync={loadResourcesAsync}
-        onError={handleLoadingError}
-        onFinish={() => handleFinishLoading(setLoadingComplete)}
-      />
-    );
+export default function App() {
+  return (
+    <View style={styles.container}>
+      <Text>start michael!</Text>
+      <Button
+        title="Take photo"
+        onPress={() => takePhoto()}>
+      </Button>
+    </View>
+  );
+}
+
+async function takePhoto() {
+  let photo = await imagePicker.launchCameraAsync({
+    allowEditing: true,
+    aspect: [4,3]
+  });
+
+  uploadPhoto(photo);
+};
+
+async function uploadPhoto(res) {
+  if (!res.cancelled) {
+    try {
+      console.log('uploading photo');
+      uploadUrl = await uploadImageAsync(res.uri);
+      console.log(uploadUrl);
+      sendToGoogle(uploadUrl);
+    } catch(err) {
+      console.log(err);
+    }
   } else {
-    return (
-      <View style={styles.container}>
-        {Platform.OS === 'ios' && <StatusBar barStyle="default" />}
-        <AppNavigator />
-      </View>
-    );
+    console.log('did not get back a photo');
   }
 }
 
-async function loadResourcesAsync() {
-  await Promise.all([
-    Asset.loadAsync([
-      require('./assets/images/robot-dev.png'),
-      require('./assets/images/robot-prod.png'),
-    ]),
-    Font.loadAsync({
-      // This is the font that we are using for our tab bar
-      ...Ionicons.font,
-      // We include SpaceMono because we use it in HomeScreen.js. Feel free to
-      // remove this if you are not using it in your app
-      'space-mono': require('./assets/fonts/SpaceMono-Regular.ttf'),
-    }),
-  ]);
+async function uploadImageAsync(uri) {
+  const blob = await new Promise((resolve, reject) => {
+    const xhr = new XMLHttpRequest();
+    xhr.onload = function() {
+      resolve(xhr.response);
+    };
+    xhr.onerror = function(e) {
+      console.log(e);
+      reject(new TypeError('Network request failed'));
+    };
+    xhr.responseType = 'blob';
+    xhr.open('GET', uri, true);
+    xhr.send(null);
+  });
+
+  if (!firebase.apps.length) {
+    firebase.initializeApp(firebaseConfig);
+  }
+
+  const ref = firebase
+    .storage()
+    .ref()
+    .child(uuid.v4());
+  const snapshot = await ref.put(blob);
+
+  blob.close();
+
+  const url = await snapshot.ref.getDownloadURL();
+  console.log(url);
+
+  return url;
 }
 
-function handleLoadingError(error) {
-  // In this case, you might want to report the error to your error reporting
-  // service, for example Sentry
-  console.warn(error);
-}
-
-function handleFinishLoading(setLoadingComplete) {
-  setLoadingComplete(true);
-}
+async function sendToGoogle(url) {
+  try {
+    let body = JSON.stringify({
+      requests: [
+        {
+          features: [
+            { type: 'TEXT_DETECTION'},
+            // { type: 'DOCUMENT_TEXT_DETECTION', maxResults: 5 },
+          ],
+          image: {
+            source: {
+              imageUri: url
+            }
+          }
+        }
+      ]
+    });
+    console.log('sending phtoo to googe');
+    let response = await fetch(
+      'https://vision.googleapis.com/v1/images:annotate?key=' +
+        Environment['GOOGLE_CLOUD_VISION_API_KEY'] + '&fields=responses.fullTextAnnotation.text',
+      {
+        headers: {
+          Accept: 'application/json',
+          'Content-Type': 'application/json'
+        },
+        method: 'POST',
+        body: body
+      }
+    );
+    let responseJson = await response.json();
+    console.log(responseJson);
+    console.log(responseJson.responses[0].fullTextAnnotation.text.split('\n'));
+  } catch (error) {
+    console.log(error);
+  }
+};
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#fff',
+    alignItems: 'center',
+    justifyContent: 'center',
   },
 });
