@@ -2,13 +2,17 @@ import React from 'react';
 import { Text, View, AsyncStorage } from 'react-native';
 import TestItemData from './TestItemData';
 import Item from './Item';
+import { SwipeListView } from 'react-native-swipe-list-view';
+import NewItem from './newItem';
+
 
 export default class ItemTable extends React.Component {
 	constructor(props) {
 		super(props);
 		this.state = {
 			edit: false,
-			items: TestItemData
+			items: TestItemData,
+			newItems: this.props.newItems
 		};
 		this.handleEdit = this.handleEdit.bind(this);
 	}
@@ -39,11 +43,32 @@ export default class ItemTable extends React.Component {
 
 	render() {
 		const ITEMS = this.state.items.map((item) => <Item key={item.id} edit={this.state.edit} item={item} />);
+		const NEWITEMS = this.state.newItems.map((item) => <NewItem name = {item}/>)
 		return (
-			<View className={this.state.edit ? 'TableEdit' : 'NoTableEdit'}>
-				<Text>Name Expiry Date </Text>
-				{ITEMS}
-			</View>
-		);
+			<SwipeListView
+				data={NEWITEMS}
+				renderItem={(data, rowMap) => (
+					<View style={styles.rowFront}>
+                    	<Text>{data.item}</Text>
+                	</View>
+					// <Item key={item.id} edit={this.state.edit} name={item} />
+				)}
+				renderHiddenItem={ (data, rowMap) => (
+					<View style={styles.rowBack}>
+						<Text>edit</Text>
+						<Text>delete</Text>
+					</View>
+				)}
+				leftOpenValue={75}
+				rightOpenValue={-75}
+			/>
+		)
 	}
+	// return (
+	// 	<View className={this.state.edit ? 'TableEdit' : 'NoTableEdit'}>
+	// 		<Text>Name Expiry Date </Text>
+	// 		{ITEMS}
+	// 	</View>
+	// );
+	
 }

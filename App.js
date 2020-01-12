@@ -5,19 +5,31 @@ import * as imagePicker from 'expo-image-picker';
 import uuid from 'uuid';
 import Environment from './config/environment'
 import firebase from './config/firebase';
+import ItemTable from './components/ItemTable';
 
+let global = []
 
-export default function App() {
-  return (
-    <View style={styles.container}>
-      <Text>Open up App.js to start working on your app!</Text>
-      <Text>start michael!</Text>
-      <Button
-        title="Take photo"
-        onPress={() => takePhoto()}>
-      </Button>
-    </View>
-  );
+//might have to add state
+export default class App extends React.Component{
+  constructor(){
+    super();
+    this.state = {
+      stuff: global
+    }
+  }
+  render(){
+    return (
+      <View style={styles.container}>
+        <Text>Open up App.js to start working on your app!</Text>
+        <Text>start michael!</Text>
+        <Button
+          title="Take photo"
+          onPress={() => takePhoto()}>
+        </Button>
+        <ItemTable newItems = {this.state.stuff} />
+      </View>
+    );
+  }
 }
 
 async function takePhoto() {
@@ -110,6 +122,7 @@ async function sendToGoogle(url) {
     let responseJson = await response.json();
     console.log(responseJson);
     console.log(responseJson.responses[0].fullTextAnnotation.text.split('\n'));
+    global = responseJson.responses[0].fullTextAnnotation.text.split('\n');
   } catch (error) {
     console.log(error);
   }
