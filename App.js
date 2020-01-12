@@ -7,6 +7,7 @@ import Environment from './config/environment'
 import firebase from './config/firebase';
 import ItemTable from './components/ItemTable';
 
+<<<<<<< HEAD
 let global = []
 
 export default class App extends React.Component{
@@ -28,6 +29,20 @@ export default class App extends React.Component{
       </View>
     );
   }
+=======
+console.disableYellowBox = true;
+
+export default function App() {
+  return (
+    <View style={styles.container}>
+      <Text>Take a photo of your grocery receipt to keep track of when your food goes bad!</Text>
+      <Button
+        title="Take photo"
+        onPress={() => takePhoto()}>
+      </Button>
+    </View>
+  );
+>>>>>>> origin/master
 }
 
 async function takePhoto() {
