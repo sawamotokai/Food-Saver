@@ -49,12 +49,21 @@ export default class Item extends React.Component {
 	CalcStyle() {
 		const diff = this.DiffinDays();
 		if (diff <= 1) {
-			return 'item_red';
+			return {
+        display: inline,
+        backgroundColor: "red"
+      }
 		}
 		if (diff <= 3) {
-			return 'item_yellow';
+			return {
+        display: inline,
+        backgroundColor: "yellow"
+      }
 		} else {
-			return 'item_green';
+        return {
+          display: inline,
+          backgroundColor: "green"
+      }
 		}
 	}
 
@@ -64,17 +73,8 @@ export default class Item extends React.Component {
 				<Text>{this.state.name}</Text>
 				<Text>{this.state.expiryDate.toLocaleString()}</Text>
 			</View>
-		);
-
-
-    pressButton(){
-        <View>
-            <Button
-                 title = "Edit"
-                 onPress = {() => render}/>
-        </View>
-    }
-
+    );
+    
     render(){
         return(
             <View style = {this.CalcStyle}>
