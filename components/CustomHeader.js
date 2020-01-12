@@ -27,9 +27,9 @@ export default class CustomHeader extends React.Component{
     render(){
         return(
             <Header>
-                <button>
+                <Button>
 
-                </button>
+                </Button>
                 <SearchBar
                     ref="searchBar"
                     placeholder="Search"
@@ -37,9 +37,9 @@ export default class CustomHeader extends React.Component{
                     onSearchButtonPress={...}
                     onCancelButtonPress={...}
                 />
-                <button>
+                <Button>
 
-                </button>
+                </Button>
             </Header>
         )
     }
